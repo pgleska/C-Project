@@ -1,0 +1,16 @@
+                            Wydawnictwo
+                           /           \
+                          /             \
+                         /               \
+                        /                 \
+                  Ksiazka                  Czasopismo
+                 /       \                /     |    \
+                /         \              /      |     \
+               /           \            /       |      \
+              /             \          /        |       \
+Popularnonaukowa     Beletrystyka Miesiecznik Dziennik Tygodnika
+                                                 \        /
+                                                  \      /
+                                                   \    / 
+                                                    \  /
+                                                   Artykul
