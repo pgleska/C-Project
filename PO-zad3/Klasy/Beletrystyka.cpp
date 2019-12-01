@@ -63,4 +63,6 @@ void Beletrystyka::update() {
 	if (param != "0") {
 		setNazwa(param);
 	}
+
+	cout << "Modyfikowanie zakonczone" << endl;
 }

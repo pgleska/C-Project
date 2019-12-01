@@ -43,5 +43,37 @@ string Miesiecznik::zapisDoPliku() {
 }
 
 void Miesiecznik::update() {
+	string param;
+	cout << "Podaj parametry oddzielone spacjami (miesiac wydania, temat, czy jest kolorowy [T/N], rok wydania, numer ISBN, nazwa), jesli nie chcesz edytowac podaj 0" << endl;
+	cin >> param;
+	if (param != "0") {
+		setMiesiacWydania(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		setTemat(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		if (param == "T") {
+			setKolorowe(true);
+		}
+		else {
+			setKolorowe(false);
+		}
+	}
+	cin >> param;
+	if (param != "0") {
+		setRokWydania(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		setNumerISBN(stoi(param));
+	}
+	cin >> param;
+	if (param != "0") {
+		setNazwa(param);
+	}
 
+	cout << "Modyfikowanie zakonczone" << endl;
 }

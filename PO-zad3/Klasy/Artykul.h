@@ -2,42 +2,18 @@
 #include "Dziennik.h"
 #include "Tygodnik.h"
 #include <string>
+#include <typeinfo>
 using namespace std;
 
 template <class T>
-class Artykul
+class Artykul : public Czasopismo
 {
 private:
-	T pochodzenie;
+	T* pochodzenie;
 protected:
 	int dlugosc;
 public:
-	Artykul(T klasa, int length) {
-		pochodzenie = klasa;
-		dlugosc = length;
-	}
-	void setPochodzenie(T klasa) {
-		pochodzenie = klasa;
-	}
-	void show() {
-		cout << "Artykul pochodzi z: " << pochodzenie << " i jest dlugosci: " << dlugosc << endl;
-	}
-
-	void update() {
-
-	}
-};
-
-template<>
-class Artykul<Dziennik> :
-	public Dziennik 
-{
-private:
-	Dziennik* pochodzenie;
-protected:
-	int dlugosc;
-public:
-	Artykul(Dziennik* klasa, int length, string name, int isbn) {
+	Artykul(T* klasa, int length, string name, int isbn) {
 		pochodzenie = klasa;
 		dlugosc = length;
 		setNazwa(name);
@@ -45,115 +21,175 @@ public:
 	}
 
 	~Artykul() {
-		delete &pochodzenie;
+		delete& pochodzenie;
 	}
 
-	void setPochodzenie(Dziennik* d) {
-		pochodzenie = d;
+	void setPochodzenie(T* klasa) {
+		pochodzenie = klasa;
 	}
 
-	Dziennik* getPochodzenie() {
+	T* getPochodzenie() {
 		return pochodzenie;
 	}
-
+		
 	void setDlugosc(int i) {
 		dlugosc = i;
 	}
-
+		
 	int getDlugosc() {
 		return dlugosc;
 	}
 
 	void show() {
-		cout << "Nazwa artykulu to: " + getNazwa() + " a jego numer ISBN: " << getNumerISBN() << endl;
-		cout << "Artykul pochodzi z: " << pochodzenie->getNazwa() << " i jest dlugosci: " << dlugosc << endl;
-		cout << "Czasopismo, z ktorego pochodzi, zostalo wydane w dniu: " << pochodzenie->getDataWydania() << " i czy jest ciekawa: " << pochodzenie->getCiekawa() << endl;
-		cout << "Czy czasopismo jest kolorowe: " << pochodzenie->getKolorowe() << " i zostalo wydane Anno Domini: " << pochodzenie->getRokWydania() << endl;
-		cout << "Nazwa wydawnictwa pochodzenia to: " << pochodzenie->getNazwa() << " a jego numer ISBN to: " << pochodzenie->getNumerISBN() << endl;
+		if (typeid(*pochodzenie) == typeid(Dziennik)) {
+			Dziennik* ptr = dynamic_cast<Dziennik*>(pochodzenie);
+			cout << "Nazwa artykulu to: " + getNazwa() + " a jego numer ISBN: " << getNumerISBN() << endl;
+			cout << "Artykul pochodzi z: " << ptr->getNazwa() << " i jest dlugosci: " << dlugosc << endl;
+			cout << "Czasopismo, z ktorego pochodzi, zostalo wydane w dniu: " << ptr->getDataWydania() << " i czy jest ciekawa: " << ptr->getCiekawa() << endl;
+			cout << "Czy czasopismo jest kolorowe: " << ptr->getKolorowe() << " i zostalo wydane Anno Domini: " << ptr->getRokWydania() << endl;
+			cout << "Nazwa wydawnictwa pochodzenia to: " << ptr->getNazwa() << " a jego numer ISBN to: " << ptr->getNumerISBN() << endl;
+		}
+		else if (typeid(*pochodzenie) == typeid(Tygodnik)) {
+			Tygodnik* ptr = dynamic_cast<Tygodnik*>(pochodzenie);
+			cout << "Nazwa artykulu to: " + getNazwa() + " a jego numer ISBN: " << getNumerISBN() << endl;
+			cout << "Artykul pochodzi z: " << ptr->getNazwa() << " i jest dlugosci: " << dlugosc << endl;
+			cout << "Czasopismo, z ktorego pochodzi, zostalo wydane w tygodniu: " << ptr->getTydzienWydania() << " i jest autora: " << ptr->getAutor() << endl;
+			cout << "Czy czasopismo jest kolorowe: " << ptr->getKolorowe() << " i zostalo wydane Anno Domini: " << ptr->getRokWydania() << endl;
+			cout << "Nazwa wydawnictwa pochodzenia to: " << ptr->getNazwa() << " a jego numer ISBN to: " << ptr->getNumerISBN() << endl;
+		}
+	}
+ 
+	void update() {
+		string param;
+		if (typeid(*pochodzenie) == typeid(Dziennik)) {
+			cout << "Podajparametry oddzielone spacjami (nazwa artykulu, numer ISBN artykulu, dlugosc, data wydania, czy jest to ciekawe [T/N], czy jest to kolorowe czasopismo [T/N], rok wydania, numerISBN, nazwe pochodzenia), jesli nie chcesz edytowac podaj 0" << endl;
+			Dziennik* ptr = dynamic_cast<Dziennik*>(pochodzenie);
+			cin >> param;
+			if (param != "0") {
+				setNazwa(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				setNumerISBN(stoi(param));
+			}
+			cin >> param;
+			if (param != "0") {
+				setDlugosc(stoi(param));
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setDataWydania(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				if (param == "T") {
+					ptr->setCiekawa(true);
+				}
+				else {
+					ptr->setCiekawa(false);
+				}
+			}
+			cin >> param;
+			if (param != "0") {
+				if (param == "T") {
+					ptr->setKolorowe(true);
+				}
+				else {
+					ptr->setKolorowe(false);
+				}
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setRokWydania(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setNumerISBN(stoi(param));
+
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setNazwa(param);
+			}
+		} 
+		else if (typeid(*pochodzenie) == typeid(Tygodnik)) {
+			cout << "Podajparametry oddzielone spacjami (nazwa artykulu, numer ISBN artykulu, dlugosc, tydzien wydania, autor, czy jest to kolorowe czasopismo [T/N], rok wydania, numerISBN, nazwe pochodzenia), jesli nie chcesz edytowac podaj 0" << endl;
+			Tygodnik* ptr = dynamic_cast<Tygodnik*>(pochodzenie);
+			cin >> param;
+			if (param != "0") {
+				setNazwa(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				setNumerISBN(stoi(param));
+			}
+			cin >> param;
+			if (param != "0") {
+				setDlugosc(stoi(param));
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setTydzienWydania(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setAutor(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				if (param == "T") {
+					ptr->setKolorowe(true);
+				}
+				else {
+					ptr->setKolorowe(false);
+				}
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setRokWydania(param);
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setNumerISBN(stoi(param));
+
+			}
+			cin >> param;
+			if (param != "0") {
+				ptr->setNazwa(param);
+			}
+		}
 	}
 
 	string zapisDoPliku() {
 		string wynik;
 		string ciekawa, kolorowe;
-		if (pochodzenie->getCiekawa()) {
-			ciekawa = "T";
+		if (typeid(*pochodzenie) == typeid(Dziennik)) {
+			Dziennik* ptr = dynamic_cast<Dziennik*>(pochodzenie);
+			if (ptr->getCiekawa()) {
+				ciekawa = "T";
+			}
+			else {
+				ciekawa = "N";
+			}
+			if (ptr->getKolorowe()) {
+				kolorowe = "T";
+			}
+			else {
+				kolorowe = "N";
+			}
+			wynik = "D " + getNazwa() + " " + to_string(getNumerISBN()) + " " + to_string(dlugosc) + " " + ptr->getDataWydania() + " " + ciekawa + " " + kolorowe + " " + ptr->getRokWydania() + " " + to_string(ptr->getNumerISBN()) + " " + ptr->getNazwa();
 		}
-		else {
-			ciekawa = "N";
+		else if (typeid(*pochodzenie) == typeid(Tygodnik)) {
+			Tygodnik* ptr = dynamic_cast<Tygodnik*>(pochodzenie);
+			if (ptr->getKolorowe()) {
+				kolorowe = "T";
+			}
+			else {
+				kolorowe = "N";
+			}
+			wynik = "T " + getNazwa() + " " + to_string(getNumerISBN()) + " " + to_string(dlugosc) + " " + ptr->getTydzienWydania() + " " + ptr->getAutor() + " " + kolorowe + " " + ptr->getRokWydania() + " " + to_string(ptr->getNumerISBN()) + " " + ptr->getNazwa();
 		}
-		if (pochodzenie->getKolorowe()) {
-			kolorowe = "T";
-		}
-		else {
-			kolorowe = "N";
-		}
-		wynik = "D " + getNazwa() + " " + to_string(getNumerISBN()) + " " + to_string(dlugosc) + " " + pochodzenie->getDataWydania() + " " + ciekawa + " " + kolorowe + " " + pochodzenie->getRokWydania() + " " + to_string(pochodzenie->getNumerISBN()) + " " + pochodzenie->getNazwa();
+		
 		return wynik;
-	}
-
-	void update() {
-
-	}
-};
-
-template<>
-class Artykul<Tygodnik> :
-	public Tygodnik
-{
-private:
-	Tygodnik* pochodzenie;
-protected:
-	int dlugosc;
-public:
-	Artykul(Tygodnik* klasa, int length, string name, int isbn) {
-		pochodzenie = klasa;
-		dlugosc = length;
-		setNazwa(name);
-		setNumerISBN(isbn);
-	}
-
-	~Artykul() {
-		delete &pochodzenie;
-	}
-
-	void setPochodzenie(Tygodnik* t) {
-		pochodzenie = t;
-	}
-
-	Tygodnik* getPochodzenie() {
-		return pochodzenie;
-	}
-
-	void setDlugosc(int i) {
-		dlugosc = i;
-	}
-
-	int getDlugosc() {
-		return dlugosc;
-	}
-
-	void show() {
-		cout << "Nazwa artykulu to: " + getNazwa() + " a jego numer ISBN: " << getNumerISBN() << endl;
-		cout << "Artykul pochodzi z: " << pochodzenie->getNazwa() << " i jest dlugosci: " << dlugosc << endl;
-		cout << "Czasopismo, z ktorego pochodzi, zostalo wydane w tygodniu: " << pochodzenie->getTydzienWydania() << " i jest autora: " << pochodzenie->getAutor() << endl;
-		cout << "Czy czasopismo jest kolorowe: " << pochodzenie->getKolorowe() << " i zostalo wydane Anno Domini: " << pochodzenie->getRokWydania() << endl;
-		cout << "Nazwa wydawnictwa pochodzenia to: " << pochodzenie->getNazwa() << " a jego numer ISBN to: " << pochodzenie->getNumerISBN() << endl;
-	}
-
-	string zapisDoPliku() {
-		string wynik;
-		string kolorowe;
-		if (pochodzenie->getKolorowe()) {
-			kolorowe = "T";
-		}
-		else {
-			kolorowe = "N";
-		}
-		wynik = "T " + getNazwa() + " " + to_string(getNumerISBN()) + " " + to_string(dlugosc) + " " + pochodzenie->getTydzienWydania() + " " + pochodzenie->getAutor() + " " + kolorowe + " " + pochodzenie->getRokWydania() + " " + to_string(pochodzenie->getNumerISBN()) + " " + pochodzenie->getNazwa();
-		return wynik;
-	}
-
-	void update() {
-
 	}
 };

@@ -1,3 +1,5 @@
-﻿  main.cpp
+﻿  Wezel.cpp
+  main.cpp
+  Generowanie kodu...
 C:\Users\Piotr\source\repos\PO-zad3\PO-zad3\main.cpp(67,6): warning C4101: "typ": lokalna zmienna, do której nie istnieje odwołanie
   PO-zad3.vcxproj -> C:\Users\Piotr\source\repos\PO-zad3\Debug\PO-zad3.exe

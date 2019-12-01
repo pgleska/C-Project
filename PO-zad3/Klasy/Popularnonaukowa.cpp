@@ -43,5 +43,37 @@ string Popularnonaukowa::zapisDoPliku() {
 }
 
 void Popularnonaukowa::update() {
+	string param;
+	cout << "Podaj parametry oddzielone spacjami (temat, czy ciekawa [T/N], oprawa, autor, numer ISBN, nazwa), jesli nie chcesz edytowac podaj 0" << endl;
+	cin >> param;
+	if (param != "0") {
+		setTemat(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		if (param == "T") {
+			setCiekawa(true);
+		}
+		else {
+			setCiekawa(false);
+		}
+	}
+	cin >> param;
+	if (param != "0") {
+		setOprawa(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		setAutor(param);
+	}
+	cin >> param;
+	if (param != "0") {
+		setNumerISBN(stoi(param));
+	}
+	cin >> param;
+	if (param != "0") {
+		setNazwa(param);
+	}
 
+	cout << "Modyfikowanie zakonczone" << endl;
 }
